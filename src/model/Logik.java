@@ -35,8 +35,12 @@ public class Logik {
 
     public Matrix potenzMatrix(int potenz) {
         Matrix potenzMatrix = new Matrix(this.matrix.getMatrix());
-        for (int i = 1; i < potenz; i++) {
-            potenzMatrix = multiply(potenzMatrix, new Matrix(this.matrix.getMatrix()));
+        if (potenz <= 20) {
+            for (int i = 1; i < potenz; i++) {
+                potenzMatrix = multiply(potenzMatrix, new Matrix(this.matrix.getMatrix()));
+            }
+        }else{
+            return potenzMatrix(potenz - (potenz - 20));
         }
         return potenzMatrix;
     }
@@ -196,10 +200,36 @@ public class Logik {
         return artikulationen;
     }
 
+    public ArrayList<ArrayList<Integer>> bruecken(){
+        ArrayList<ArrayList<Integer>> bruecken = new ArrayList<>();
+        ArrayList<ArrayList<Integer>> kompo = this.komponenten();
+        Matrix kopie = copy(this.matrix);
+        Matrix a1 = copy(this.matrix);
+        for (int i = 0; i <a1.getMatrix().length ; i++) {
+            for (int j = 0; j <a1.getMatrix().length ; j++) {
+                if (a1.getMatrix()[i][j] == 1) {
+                    a1.getMatrix()[i][j] = 0;
+                    a1.getMatrix()[j][i] = 0;
+                    this.matrix = a1;
+                    if (this.komponenten().size() > kompo.size()){
+                        ArrayList<Integer> kante = new ArrayList<>();
+                        kante.add(Math.min(j+1, i+1));
+                        kante.add(Math.max(j+1, i+1));
+                        if (!bruecken.contains(kante)) bruecken.add(kante);
+                    }
+                    this.matrix = copy(kopie);
+                    a1 = copy(this.matrix);
+                }
+            }
+        }
+        this.matrix = copy(kopie);
+        return bruecken;
+    }
+
     public String toString() {
         StringBuilder s = new StringBuilder("Exzentrizitäten: \n");
         for (int i = 0; i < this.exzentrizitaeten.length; i++) {
-            s.append("Knoten ").append(i + 1).append(": ").append(this.exzentrizitaeten[i]).append("\n");
+            s.append( String.format("Knoten%-2d: %-2d\n", i+1, this.exzentrizitaeten[i]));
         }
         s.append("\n");
         s.append("Durchmesser: ").append(this.durchmesser()).append("\n");
@@ -222,11 +252,16 @@ public class Logik {
         s.append("\n");
         s.append("Atrikulationen: \n").append(this.artikulationen()).append("\n");
         s.append("\n");
+        s.append("Brücken: ").append(this.bruecken()).append("\n");
+        s.append("\n");
         s.append("Distanzmatrix: \n").append(this.distanzMatrix.toString()).append("\n");
         s.append("Wegmatrix: \n").append(wegMatrix(this.matrix)).append("\n");
         s.append("A: \n").append(this.matrix).append("\n");
         for (int i = 2; i < this.matrix.getMatrix().length + 3; i++) {
             s.append("A").append(i).append(":\n").append(this.potenzMatrix(i)).append("\n");
+            if (i >= 6){
+                break;
+            }
         }
         return s.toString();
     }

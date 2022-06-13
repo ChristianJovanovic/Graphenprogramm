@@ -112,12 +112,7 @@ public class Matrix implements Serializable {
         String m = "";
         for (int i = 0; i < this.matrix.length; i++) {
             for (int j = 0; j < this.matrix[i].length; j++) {
-                if (this.matrix[i][j] >= 10){
-                    m += this.matrix[i][j] + " ";
-                }
-                else {
-                    m += this.matrix[i][j] +"  ";
-                }
+                m += String.format("%4d",this.matrix[i][j]);
             }
             m += "\n";
         }
