@@ -11,7 +11,7 @@ public class Logik {
     private Matrix matrix;
     private Matrix distanzMatrix;
 
-    private Long[] exzentrizitaeten;
+    private int[] exzentrizitaeten;
 
     public Logik(String filename) throws MatrixException {
         this.matrix = new Matrix(filename);
@@ -21,7 +21,7 @@ public class Logik {
 
     public static Matrix multiply(Matrix m1, Matrix m2) {
         int laenge = m1.getMatrix().length;
-        Long[][] ergebnis = new Long[laenge][laenge];
+        int[][] ergebnis = new int[laenge][laenge];
         int zw = 0;
         for (int i = 0; i < laenge; i++) {
             for (int j = 0; j < laenge; j++) {
@@ -42,19 +42,19 @@ public class Logik {
     }
 
     public Matrix distanzMatrixInitialisierung() {
-        Long[][] a = this.matrix.getMatrix();
-        Long[][] distanz = new Long[a.length][a.length];
+        int[][] a = this.matrix.getMatrix();
+        int[][] distanz = new int[a.length][a.length];
         for (int i = 0; i < a.length; i++) {
             for (int j = 0; j < a.length; j++) {
-                Long value = a[i][j];
+                int value = a[i][j];
                 if (i == j) {
-                    distanz[i][j] = 0l;
+                    distanz[i][j] = 0;
                 }
                 if (i != j && value == 0) {
-                    distanz[i][j] = -1l;
+                    distanz[i][j] = -1;
                 }
                 if (i != j && value == 1) {
-                    distanz[i][j] = 1l;
+                    distanz[i][j] = 1;
                 }
             }
         }
@@ -64,15 +64,15 @@ public class Logik {
 
     public Matrix distanzMatrixFertig() {
         Matrix distanz = this.distanzMatrixInitialisierung();
-        Long[][] werte = distanz.getMatrix();
-        Long[][] a = this.matrix.getMatrix();
+        int[][] werte = distanz.getMatrix();
+        int[][] a = this.matrix.getMatrix();
 
         for (int i = 2; i <= a.length + 3; i++) {
             a = this.potenzMatrix(i).getMatrix();
             for (int j = 0; j < werte.length; j++) {
                 for (int k = 0; k < werte.length; k++) {
                     if (werte[j][k] == -1 && a[j][k] != 0) {
-                        werte[j][k] = (long)i;
+                        werte[j][k] = i;
                     }
                 }
             }
@@ -86,14 +86,14 @@ public class Logik {
             weg.getMatrix()[i][i] += 1;
         }
 
-        Long[][] a = copy(this.matrix).getMatrix();
+        int[][] a = copy(this.matrix).getMatrix();
 
         for (int i = 2; i <= a.length + 3; i++) {
             a = this.potenzMatrix(i).getMatrix();
             for (int j = 0; j < weg.getMatrix().length; j++) {
                 for (int k = 0; k < weg.getMatrix().length; k++) {
                     if (a[j][k] != 0) {
-                        weg.getMatrix()[j][k] = (long)1;
+                        weg.getMatrix()[j][k] = 1;
                     }
                 }
             }
@@ -101,9 +101,9 @@ public class Logik {
         return weg;
     }
 
-    public Long[] exzentrizitaeten() {
-        Long[][] distanz = this.distanzMatrix.getMatrix();
-        Long[] exzentrizitaeten = new Long[this.distanzMatrix.getMatrix().length];
+    public int[] exzentrizitaeten() {
+        int[][] distanz = this.distanzMatrix.getMatrix();
+        int[] exzentrizitaeten = new int[this.distanzMatrix.getMatrix().length];
         for (int i = 0; i < distanz.length; i++) {
             for (int j = 0; j < distanz.length; j++) {
                 exzentrizitaeten[j] = Math.max(exzentrizitaeten[j], distanz[i][j]);
@@ -112,8 +112,8 @@ public class Logik {
         return exzentrizitaeten;
     }
 
-    public Long durchmesser() {
-        Long durchmesser = this.exzentrizitaeten[0];
+    public int durchmesser() {
+        int durchmesser = this.exzentrizitaeten[0];
         for (int i = 0; i < this.exzentrizitaeten.length; i++) {
             if (durchmesser < this.exzentrizitaeten[i]) {
                 durchmesser = this.exzentrizitaeten[i];
@@ -122,8 +122,8 @@ public class Logik {
         return durchmesser;
     }
 
-    public Long radius() {
-        Long radius = this.exzentrizitaeten[0];
+    public int radius() {
+        int radius = this.exzentrizitaeten[0];
         for (int i = 0; i < this.exzentrizitaeten.length; i++) {
             if (radius > this.exzentrizitaeten[i]) {
                 radius = this.exzentrizitaeten[i];
@@ -146,7 +146,7 @@ public class Logik {
         ArrayList<ArrayList<Integer>> komponenten = new ArrayList<>();
         ArrayList<Integer> knoten = new ArrayList<>();
         Boolean a = false;
-        Long[][] wegMatrix = copy(wegMatrix(this.matrix)).getMatrix();
+        int[][] wegMatrix = copy(wegMatrix(this.matrix)).getMatrix();
         for (int i = 0; i < wegMatrix.length; i++) {
             if (!(new Matrix(wegMatrix).contains(0))) {
                 for (int j = 0; j < wegMatrix.length; j++) {
@@ -158,7 +158,7 @@ public class Logik {
                     komponenten.add(knoten);
                 }
             } else {
-                Long[] row = wegMatrix[i];
+                int[] row = wegMatrix[i];
                 for (int j = 0; j < row.length; j++) {
                     if (row[j] == 1) {
                         knoten.add(j + 1);

@@ -7,13 +7,13 @@ import java.io.*;
 
 public class Matrix implements Serializable {
 
-    private Long[][] matrix;
+    private int[][] matrix;
 
     public Matrix(String filename) throws MatrixException {
         setMatrix(filename);
     }
 
-    public Matrix(Long[][] matrix) {
+    public Matrix(int[][] matrix) {
         this.matrix = matrix;
     }
 
@@ -21,7 +21,7 @@ public class Matrix implements Serializable {
         this.matrix = readCsv(filename);
     }
 
-    public Long[][] getMatrix() {
+    public int[][] getMatrix() {
         return matrix;
     }
 
@@ -41,10 +41,10 @@ public class Matrix implements Serializable {
         return laenge;
     }
 
-    public static Long[] convertToIntArray(String[] strings) {
-        Long[] result = new Long[strings.length];
+    public static int[] convertToIntArray(String[] strings) {
+        int[] result = new int[strings.length];
         for (int i = 0; i < strings.length; i++) {
-            result[i] = Long.parseLong(strings[i]);
+            result[i] = Integer.parseInt(strings[i]);
         }
         return result;
     }
@@ -52,8 +52,8 @@ public class Matrix implements Serializable {
     /*
     Liest die Matrix aus einer CSV Datei ein.
      */
-    public static Long[][] readCsv(String filename) throws MatrixException {
-        Long[][] ma = new Long[getLaenge(filename)][getLaenge(filename)];
+    public static int[][] readCsv(String filename) throws MatrixException {
+        int[][] ma = new int[getLaenge(filename)][getLaenge(filename)];
 
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String zeile;
@@ -71,8 +71,8 @@ public class Matrix implements Serializable {
 
 
     public static Matrix copy(Matrix m){
-        Long[][] a = m.getMatrix();
-        Long[][] result = new Long[a.length][a.length];
+        int[][] a = m.getMatrix();
+        int[][] result = new int[a.length][a.length];
         for (int i = 0; i < a.length ; i++) {
             for (int j = 0; j < a.length ; j++) {
                 result[i][j] = a[i][j];
@@ -85,8 +85,8 @@ public class Matrix implements Serializable {
         if (n == 0){
             return m;
         }
-        Long[][] a = copy(m).getMatrix();
-        Long[][] result = new Long[a.length - 1][a.length - 1];
+        int[][] a = copy(m).getMatrix();
+        int[][] result = new int[a.length - 1][a.length - 1];
 
         for (int i = 0; i < result.length; i++) {
             for (int j = 0; j < result.length; j++) {
