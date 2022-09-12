@@ -226,22 +226,26 @@ public class Logik {
         return bruecken;
     }
 
+
+
     public String toString() {
         StringBuilder s = new StringBuilder("Exzentrizitäten: \n");
         for (int i = 0; i < this.exzentrizitaeten.length; i++) {
             s.append( String.format("Knoten%-2d: %-2d\n", i+1, this.exzentrizitaeten[i]));
         }
         s.append("\n");
-        s.append("Durchmesser: ").append(this.durchmesser()).append("\n");
-        s.append("Radius: ").append(this.radius()).append("\n");
-        s.append("\n");
-        s.append("Zentrum: {");
-        Iterator a = this.zentrum().iterator();
-        while (a.hasNext()) {
-            s.append(a.next()).append(", ");
+        if (this.komponenten().size() < 2) {
+            s.append("Durchmesser: ").append(this.durchmesser()).append("\n");
+            s.append("Radius: ").append(this.radius()).append("\n");
+            s.append("\n");
+            s.append("Zentrum: {");
+            Iterator a = this.zentrum().iterator();
+            while (a.hasNext()) {
+                s.append(a.next()).append(", ");
+            }
+            s.replace(s.lastIndexOf(","), s.lastIndexOf(",") + 2, "");
+            s.append("} \n").append("\n");
         }
-        s.replace(s.lastIndexOf(","), s.lastIndexOf(",") + 2, "");
-        s.append("} \n").append("\n");
         s.append("Komponenten: \n");
         Iterator iterator = this.komponenten().iterator();
         int counter = 1;
