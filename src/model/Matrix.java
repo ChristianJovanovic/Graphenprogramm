@@ -21,6 +21,10 @@ public class Matrix implements Serializable {
         this.matrix = readCsv(filename);
     }
 
+    public void setMatrix(int[][] matrix){
+        this.matrix = matrix;
+    }
+
     public int[][] getMatrix() {
         return matrix;
     }
@@ -41,6 +45,9 @@ public class Matrix implements Serializable {
         return laenge;
     }
 
+    /*
+    Konvertiert ein String[] in ein int[]
+     */
     public static int[] convertToIntArray(String[] strings) {
         int[] result = new int[strings.length];
         for (int i = 0; i < strings.length; i++) {
@@ -51,6 +58,7 @@ public class Matrix implements Serializable {
 
     /*
     Liest die Matrix aus einer CSV Datei ein.
+    @ma die Matrix, die zurückgegeben wird.
      */
     public static int[][] readCsv(String filename) throws MatrixException {
         int[][] ma = new int[getLaenge(filename)][getLaenge(filename)];
@@ -70,6 +78,9 @@ public class Matrix implements Serializable {
     }
 
 
+    /*
+    Kopiert eine Matrix
+     */
     public static Matrix copy(Matrix m){
         int[][] a = m.getMatrix();
         int[][] result = new int[a.length][a.length];
@@ -81,6 +92,9 @@ public class Matrix implements Serializable {
         return new Matrix(result);
     }
 
+    /*
+    Kopiert eine Matrix ohne n
+     */
     public static Matrix copy(Matrix m, int n){
         if (n == 0){
             return m;
@@ -88,14 +102,28 @@ public class Matrix implements Serializable {
         int[][] a = copy(m).getMatrix();
         int[][] result = new int[a.length - 1][a.length - 1];
 
-        for (int i = 0; i < result.length; i++) {
-            for (int j = 0; j < result.length; j++) {
-                if (i != n) result[i][j] = a[i][j];
+        if(n != 1) {
+            for (int i = 0; i < result.length; i++) {
+                for (int j = 0; j < result.length; j++) {
+                    if (i != n) result[i][j] = a[i][j];
+                }
             }
         }
+        if (n == 1){
+            for (int i = 1; i <result.length ; i++) {
+                for (int j = 1; j <result.length ; j++) {
+                    result[i][j] = a[i][j];
+                }
+
+            }
+        }
+
         return new Matrix(result);
     }
 
+    /*
+
+     */
     public boolean contains(int a) {
         boolean b = false;
         for (int i = 0; i < this.matrix.length; i++) {

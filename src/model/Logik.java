@@ -19,6 +19,9 @@ public class Logik {
         this.exzentrizitaeten = this.exzentrizitaeten();
     }
 
+    /*
+    Multipliziert zwei Matrizen miteinander
+     */
     public static Matrix multiply(Matrix m1, Matrix m2) {
         int laenge = m1.getMatrix().length;
         int[][] ergebnis = new int[laenge][laenge];
@@ -33,6 +36,9 @@ public class Logik {
         return new Matrix(ergebnis);
     }
 
+    /*
+    Liefert die Potenzmatrix zurück
+     */
     public Matrix potenzMatrix(int potenz) {
         Matrix potenzMatrix = new Matrix(this.matrix.getMatrix());
         if (potenz <= 20) {
@@ -45,6 +51,9 @@ public class Logik {
         return potenzMatrix;
     }
 
+    /*
+
+     */
     public Matrix distanzMatrixInitialisierung() {
         int[][] a = this.matrix.getMatrix();
         int[][] distanz = new int[a.length][a.length];
@@ -110,6 +119,8 @@ public class Logik {
         int[] exzentrizitaeten = new int[this.distanzMatrix.getMatrix().length];
         for (int i = 0; i < distanz.length; i++) {
             for (int j = 0; j < distanz.length; j++) {
+                //TODO
+                //Kann noch mit einem Stream verbessert werden
                 exzentrizitaeten[j] = Math.max(exzentrizitaeten[j], distanz[i][j]);
             }
         }
@@ -177,26 +188,51 @@ public class Logik {
         return komponenten;
     }
 
-    public ArrayList<Integer> artikulationen(){
+   /* public ArrayList<Integer> artikulationen(){
         Matrix kopie = copy(this.matrix);
         Matrix weg1 = wegMatrix(kopie);
         ArrayList<ArrayList<Integer>> komponenten = this.komponenten();
+        System.out.println(komponenten.size());
         ArrayList<Integer> artikulationen = new ArrayList<>();
 
         for (int i = 0; i < kopie.getMatrix().length; i++) {
             this.matrix = copy(this.matrix, i);
             Matrix weg2 = wegMatrix(this.matrix);
             if (!weg1.contains(0) && weg2.contains(0)){
-                if (!artikulationen.contains(i+1)) artikulationen.add(i+1);
+                if (!artikulationen.contains(i)) artikulationen.add(i);
             }
-            if (komponenten.size() < this.komponenten().size() -1){
-                if (!artikulationen.contains(i+1)) artikulationen.add(i+1);
+            System.out.println("k1: " + komponenten.size());
+            System.out.print("k2: " + this.komponenten().size());
+            if (komponenten.size() < this.komponenten().size()){
+                if (!artikulationen.contains(i)) artikulationen.add(i);
             }
             this.matrix = copy(kopie);
         }
 
         this.matrix = copy(kopie);
 
+        return artikulationen;
+    }*/
+
+    public ArrayList<Integer> artikulationen(){
+        Matrix m1 = new Matrix(this.matrix.getMatrix());
+        Matrix copy = copy(this.matrix);
+        Matrix weg = wegMatrix(copy(this.matrix));
+        ArrayList<ArrayList<Integer>> k1 = this.komponenten();
+        ArrayList<Integer> artikulationen = new ArrayList<>();
+
+        for (int i = 0; i < m1.getMatrix().length; i++) {
+            for (int j = 0; j < m1.getMatrix().length; j++) {
+                weg.getMatrix()[i][j] = 0;
+                this.wegMatrix(m1).getMatrix()[j][i] = 0;
+                System.out.println(this.matrix);
+            }
+            if (this.komponenten().size() > k1.size()){
+                artikulationen.add(i + 1);
+            }
+           this.matrix = copy(copy);
+        }
+        this.matrix = copy(copy);
         return artikulationen;
     }
 
